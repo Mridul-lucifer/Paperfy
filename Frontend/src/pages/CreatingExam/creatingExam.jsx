@@ -18,14 +18,25 @@ const CreatingExam = () => {
     control,
     name: 'questions',
   });
+
+  // Handle form submission
   const onSubmit = async (data) => {
-    console.log(data);
+    // Prepare payload to ensure "option" and "answer" remain numeric
+    const payload = {
+      questions: data.questions.map((q) => ({
+        question: q.question,
+        options: q.options.map((opt, index) => ({
+          option: index + 1, // Numeric option
+          value: opt.value,  // String option value
+        })),
+        answer: Number(q.answer), // Ensure answer is numeric
+      })),
+    };
+
     try {
-      const response = await axios.post('http://localhost:5000/CreatePaper', {
-        questions : data
-      });
+    //   const response = await axios.post('http://localhost:5000/exam', payload);
       alert('Exam successfully created!');
-      console.log(response.data);
+      console.log(payload.questions);
     } catch (err) {
       console.error('Error submitting exam:', err);
     }
@@ -33,11 +44,11 @@ const CreatingExam = () => {
 
   return (
     <div className="p-5">
-      <h2>Create an Exam</h2>
+      <h2 className="text-xl font-bold">CREATE AN EXAM</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         {fields.map((item, questionIndex) => (
           <div key={item.id} className="mt-4 border p-3 rounded-md">
-            <label>Question {questionIndex + 1}:</label>
+            <label className="font-bold">QUESTION {questionIndex + 1}:</label>
             <input
               type="text"
               placeholder="Enter question"
@@ -51,38 +62,35 @@ const CreatingExam = () => {
                 {errors.questions[questionIndex].question.message}
               </p>
             )}
+
+            {/* Render 4 option inputs */}
             <div className="grid grid-cols-2 gap-2 mt-2">
               {Array.from({ length: 4 }).map((_, optionIndex) => (
                 <div key={optionIndex}>
-                  <label>Option {optionIndex + 1}:</label>
+                  <label className="font-bold">OPTION {optionIndex + 1}:</label>
                   <input
                     type="text"
                     placeholder={`Enter option ${optionIndex + 1}`}
                     {...register(
                       `questions.${questionIndex}.options.${optionIndex}.value`,
-                      { required: 'Option is required' }
+                      {
+                        required: 'Option is required',
+                      }
                     )}
                     className="border rounded px-2 py-1 w-full"
                   />
-                  <input
-                    type="hidden"
-                    value={optionIndex + 1}
-                    {...register(
-                      `questions.${questionIndex}.options.${optionIndex}.option`
-                    )}
-                  />
-                  {errors?.questions?.[questionIndex]?.options?.[optionIndex]
-                    ?.value && (
+                  {errors?.questions?.[questionIndex]?.options?.[optionIndex]?.value && (
                     <p className="text-red-500">
-                      {errors.questions[questionIndex].options[optionIndex]
-                        .value.message}
+                      {errors.questions[questionIndex].options[optionIndex].value.message}
                     </p>
                   )}
                 </div>
               ))}
             </div>
+
+            {/* Answer input */}
             <div className="mt-2">
-              <label>Correct Option (1 to 4):</label>
+              <label className="font-bold">ANSWER (1 TO 4):</label>
               <input
                 type="number"
                 min="1"
@@ -107,6 +115,8 @@ const CreatingExam = () => {
                 </p>
               )}
             </div>
+
+            {/* Remove question button */}
             <button
               type="button"
               onClick={() => remove(questionIndex)}
@@ -116,13 +126,15 @@ const CreatingExam = () => {
             </button>
           </div>
         ))}
+
+        {/* Add new question button */}
         <button
           type="button"
           onClick={() =>
             append({
               question: '',
-              options: Array.from({ length: 4 }).map((_, index) => ({
-                option: index + 1,
+              options: Array.from({ length: 4 }).map(() => ({
+                option: 0,
                 value: '',
               })),
               answer: '',
@@ -132,6 +144,8 @@ const CreatingExam = () => {
         >
           Add Question
         </button>
+
+        {/* Submit button */}
         <button type="submit" className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2">
           Submit Exam
         </button>

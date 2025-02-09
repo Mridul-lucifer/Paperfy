@@ -18,25 +18,21 @@ const CreatingExam = () => {
     control,
     name: 'questions',
   });
-
-  // Handle form submission
   const onSubmit = async (data) => {
-    // Prepare payload to ensure "option" and "answer" remain numeric
     const payload = {
       questions: data.questions.map((q) => ({
         question: q.question,
         options: q.options.map((opt, index) => ({
-          option: index + 1, // Numeric option
-          value: opt.value,  // String option value
+          option: index + 1,
+          value: opt.value,
         })),
-        answer: Number(q.answer), // Ensure answer is numeric
+        answer: Number(q.answer),
       })),
     };
 
     try {
     //   const response = await axios.post('http://localhost:5000/exam', payload);
       alert('Exam successfully created!');
-      console.log(payload.questions);
     } catch (err) {
       console.error('Error submitting exam:', err);
     }

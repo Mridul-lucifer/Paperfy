@@ -31,7 +31,7 @@ const CreatingExam = () => {
     };
 
     try {
-    //   const response = await axios.post('http://localhost:5000/exam', payload);
+     const response = await axios.post('http://localhost:5000/CreatePaper', payload);
       alert('Exam successfully created!');
     } catch (err) {
       console.error('Error submitting exam:', err);

@@ -1,24 +1,24 @@
 const mongoose = require('mongoose');
 
 const questionPaperScheme = new mongoose.Schema({
-    OwnerId:  {
+    ownerId:  {
         type: String,
         required: true
     },
-    TotalQuestion: {
+    totalQuestion: {
         type: Number,
         required: false
     },
-    Questions: [
+    questions: [
         {
-            Question : String,
-            Options : [
+            question : String,
+            options : [
                 {
-                    Option : Number,
-                    Value : String
+                    option : Number,
+                    value : String
                 }
             ],
-            Answer : Number
+            answer : Number
         }
     ]
 })

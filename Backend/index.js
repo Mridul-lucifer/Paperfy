@@ -7,7 +7,7 @@ const app = express();
 
 const {SignUpFunction,LoginFunction} = require('./Functions/SignupLoginFile')
 const {createPaperFunction} = require('./Functions/CreatePaperFile');
-const {verification} = require('./Middlewares/VerificationFile');
+// const {verification} = require('./Middlewares/VerificationFile');
 
 mongoose.connect(process.env.MongoUri).then(()=>{
     console.log("MongoDB Connected");

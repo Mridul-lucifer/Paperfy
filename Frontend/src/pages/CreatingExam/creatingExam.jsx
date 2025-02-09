@@ -19,10 +19,13 @@ const CreatingExam = () => {
     name: 'questions',
   });
   const onSubmit = async (data) => {
+    console.log(data);
     try {
-    //   const response = await axios.post('http://localhost:5000/exam', data);
+      const response = await axios.post('http://localhost:5000/CreatePaper', {
+        questions : data
+      });
       alert('Exam successfully created!');
-      console.log(data);
+      console.log(response.data);
     } catch (err) {
       console.error('Error submitting exam:', err);
     }

@@ -1,11 +1,11 @@
 const QuestionPaper = require('../Models/QuestionPaper');
 const createPaperFunction = async function (req,res) {
-     const { questions} = req.body;
-        const Paper = new QuestionPaper({
-            OwnerId : 1,
-            TotalQuestion : questions.length,
-            Questions : questions
-        })
+    const { questions} = req.body;
+    const Paper = new QuestionPaper({
+        ownerId : 1,
+        totalQuestion : questions.length,
+        questions : questions
+    })
         await Paper.save();
         res.status(200).json(Paper);
 }

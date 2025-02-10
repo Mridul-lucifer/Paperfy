@@ -38,7 +38,7 @@ const CreatingExam = () => {
     const token = localStorage.getItem("authToken");
     try {
       setIsSubmitting(true);
-      const serverRequest = axios.post("http://localhost:5000/CreatePaper", {
+      const serverRequest = await axios.post("http://localhost:5000/CreatePaper", {
         data:payload,
         Authorization :token
       });

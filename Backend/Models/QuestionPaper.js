@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const questionPaperScheme = new mongoose.Schema({
     ownerId:  {
-        type: String,
+        type: Object,
         required: true
     },
     totalQuestion: {

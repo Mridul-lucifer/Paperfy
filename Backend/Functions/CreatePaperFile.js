@@ -1,8 +1,9 @@
 const QuestionPaper = require('../Models/QuestionPaper');
 const createPaperFunction = async function (req,res) {
-    const { questions} = req.body;
+    const { data} = req.body;
+    const questions = data.questions;
     const Paper = new QuestionPaper({
-        ownerId : 1,
+        ownerId : req.userId,
         totalQuestion : questions.length,
         questions : questions
     })

@@ -33,10 +33,13 @@ const CreatingExam = () => {
         answer: Number(q.answer),
       })),
     };
-
+    let token = localStorage.getItem("authToken");
     try {
       setIsSubmitting(true);
-      const response = await axios.post("http://localhost:5000/CreatePaper", payload);
+      const response = await axios.post("http://localhost:5000/CreatePaper", {
+        Authorization : token ,
+        data : payload
+      });
       console.log(payload);
       setTimeout(() => {
         setIsSubmitting(false);

@@ -7,7 +7,6 @@ const verification = async function (req,res,next) {
         req.userId = jwt.verify(token,secret_key);
         next();
     }else{
-        console.log(token);
         res.status(400).json({
             msg : "Error in token"
         })

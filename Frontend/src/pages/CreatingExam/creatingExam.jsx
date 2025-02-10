@@ -35,21 +35,13 @@ const CreatingExam = () => {
         answer: Number(q.answer),
       })),
     };
-    let token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     try {
       setIsSubmitting(true);
-<<<<<<< HEAD
-      const response = await axios.post("http://localhost:5000/CreatePaper", {
-        Authorization : token ,
-        data : payload
+      const serverRequest = axios.post("http://localhost:5000/CreatePaper", {
+        data:payload,
+        Authorization :token
       });
-      console.log(payload);
-      setTimeout(() => {
-        setIsSubmitting(false);
-        alert("Exam successfully created!");
-      }, 5000);
-=======
-      const serverRequest = axios.post("http://localhost:5000/CreatePaper", payload);
       const minLoaderTime = new Promise((resolve) => setTimeout(resolve, 5000));
       await Promise.all([serverRequest, minLoaderTime]);
 
@@ -62,7 +54,6 @@ const CreatingExam = () => {
         draggable: true,
         theme: "dark",
       });
->>>>>>> 3e504b2087d3558b202f7b347197e4f14e5a7df6
     } catch (err) {
       toast.error("Error creating the exam. Please try again.", {
         position: "top-center",

@@ -3,12 +3,14 @@ import axios from 'axios';
 export default function Signup() {
     const [email,setEmail] = useState();
     const [Password,setPassword] =useState();
-    const singupFunc = async function () {
+    const singupFunc = async function (e) {
+        e.preventDefault();
         const res = await axios.post('http://localhost:5000/signup',{
             "Email":email,
             "Password":Password
         })
         localStorage.setItem("authToken",res.data.token);
+        alert(res.data.msg);
     }
   return (
     <div>

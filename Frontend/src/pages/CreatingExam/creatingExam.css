@@ -150,7 +150,7 @@ html{
 .blur-content {
     filter: blur(8px);
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.1;
   }
   
   .loader-wrapper {

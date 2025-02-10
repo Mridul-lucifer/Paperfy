@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./creatingExam.css";
 
 const CreatingExam = () => {
@@ -36,6 +38,7 @@ const CreatingExam = () => {
     let token = localStorage.getItem("authToken");
     try {
       setIsSubmitting(true);
+<<<<<<< HEAD
       const response = await axios.post("http://localhost:5000/CreatePaper", {
         Authorization : token ,
         data : payload
@@ -45,15 +48,37 @@ const CreatingExam = () => {
         setIsSubmitting(false);
         alert("Exam successfully created!");
       }, 5000);
+=======
+      const serverRequest = axios.post("http://localhost:5000/CreatePaper", payload);
+      const minLoaderTime = new Promise((resolve) => setTimeout(resolve, 5000));
+      await Promise.all([serverRequest, minLoaderTime]);
+
+      toast.success("Exam successfully created!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+      });
+>>>>>>> 3e504b2087d3558b202f7b347197e4f14e5a7df6
     } catch (err) {
-      setIsSubmitting(false);
+      toast.error("Error creating the exam. Please try again.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
       console.error("Error submitting exam:", err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className={`p-5`}>
-      <h2 className="text-xl font-bold">CREATE AN EXAM</h2>
+    <div className="p-5">
+      <ToastContainer />
+      <h2 className={`text-xl font-bold ${isSubmitting ? "blur-content" : ""}`}>CREATE AN EXAM</h2>
       <form className={`${isSubmitting ? "blur-content" : ""}`} onSubmit={handleSubmit(onSubmit)}>
         {fields.map((item, questionIndex) => (
           <div key={item.id} className="mt-4 border p-3 rounded-md">

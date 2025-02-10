@@ -1,6 +1,7 @@
-import React from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import axios from "axios";
+import "./creatingExam.css";
 
 const CreatingExam = () => {
   const {
@@ -16,8 +17,11 @@ const CreatingExam = () => {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'questions',
+    name: "questions",
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const onSubmit = async (data) => {
     const payload = {
       questions: data.questions.map((q) => ({
@@ -31,17 +35,23 @@ const CreatingExam = () => {
     };
 
     try {
-     const response = await axios.post('http://localhost:5000/CreatePaper', payload);
-      alert('Exam successfully created!');
+      setIsSubmitting(true);
+      const response = await axios.post("http://localhost:5000/CreatePaper", payload);
+      console.log(payload);
+      setTimeout(() => {
+        setIsSubmitting(false);
+        alert("Exam successfully created!");
+      }, 5000);
     } catch (err) {
-      console.error('Error submitting exam:', err);
+      setIsSubmitting(false);
+      console.error("Error submitting exam:", err);
     }
   };
 
   return (
-    <div className="p-5">
+    <div className={`p-5`}>
       <h2 className="text-xl font-bold">CREATE AN EXAM</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className={`${isSubmitting ? "blur-content" : ""}`} onSubmit={handleSubmit(onSubmit)}>
         {fields.map((item, questionIndex) => (
           <div key={item.id} className="mt-4 border p-3 rounded-md">
             <label className="font-bold">QUESTION {questionIndex + 1}:</label>
@@ -49,7 +59,7 @@ const CreatingExam = () => {
               type="text"
               placeholder="Enter question"
               {...register(`questions.${questionIndex}.question`, {
-                required: 'Question is required',
+                required: "Question is required",
               })}
               className="border rounded px-2 py-1 w-full mt-2"
             />
@@ -59,7 +69,6 @@ const CreatingExam = () => {
               </p>
             )}
 
-            {/* Render 4 option inputs */}
             <div className="grid grid-cols-2 gap-2 mt-2">
               {Array.from({ length: 4 }).map((_, optionIndex) => (
                 <div key={optionIndex}>
@@ -70,21 +79,24 @@ const CreatingExam = () => {
                     {...register(
                       `questions.${questionIndex}.options.${optionIndex}.value`,
                       {
-                        required: 'Option is required',
+                        required: "Option is required",
                       }
                     )}
                     className="border rounded px-2 py-1 w-full"
                   />
-                  {errors?.questions?.[questionIndex]?.options?.[optionIndex]?.value && (
+                  {errors?.questions?.[questionIndex]?.options?.[optionIndex]
+                    ?.value && (
                     <p className="text-red-500">
-                      {errors.questions[questionIndex].options[optionIndex].value.message}
+                      {
+                        errors.questions[questionIndex].options[optionIndex]
+                          .value.message
+                      }
                     </p>
                   )}
                 </div>
               ))}
             </div>
 
-            {/* Answer input */}
             <div className="mt-2">
               <label className="font-bold">ANSWER (1 TO 4):</label>
               <input
@@ -93,14 +105,14 @@ const CreatingExam = () => {
                 max="4"
                 placeholder="Enter correct option number"
                 {...register(`questions.${questionIndex}.answer`, {
-                  required: 'Answer is required',
+                  required: "Answer is required",
                   min: {
                     value: 1,
-                    message: 'Answer must be between 1 and 4',
+                    message: "Answer must be between 1 and 4",
                   },
                   max: {
                     value: 4,
-                    message: 'Answer must be between 1 and 4',
+                    message: "Answer must be between 1 and 4",
                   },
                 })}
                 className="border rounded px-2 py-1 w-full"
@@ -112,7 +124,6 @@ const CreatingExam = () => {
               )}
             </div>
 
-            {/* Remove question button */}
             <button
               type="button"
               onClick={() => remove(questionIndex)}
@@ -123,17 +134,16 @@ const CreatingExam = () => {
           </div>
         ))}
 
-        {/* Add new question button */}
         <button
           type="button"
           onClick={() =>
             append({
-              question: '',
+              question: "",
               options: Array.from({ length: 4 }).map(() => ({
                 option: 0,
-                value: '',
+                value: "",
               })),
-              answer: '',
+              answer: "",
             })
           }
           className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
@@ -141,11 +151,33 @@ const CreatingExam = () => {
           Add Question
         </button>
 
-        {/* Submit button */}
-        <button type="submit" className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2">
+        <button
+          type="submit"
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2"
+        >
           Submit Exam
         </button>
       </form>
+
+      {isSubmitting && (
+        <div className="loader-wrapper">
+          <div className="loader circle">
+            <svg viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="32"></circle>
+            </svg>
+          </div>
+          <div className="loader triangle">
+            <svg viewBox="0 0 86 80">
+              <polygon points="43 8 79 72 7 72"></polygon>
+            </svg>
+          </div>
+          <div className="loader">
+            <svg viewBox="0 0 80 80">
+              <rect x="8" y="8" width="64" height="64"></rect>
+            </svg>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

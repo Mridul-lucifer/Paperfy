@@ -3,6 +3,7 @@ import Home from "../pages/home/Home";
 import CreatingExam from "../pages/CreatingExam/creatingExam";
 import Signup from "../components/Signup";
 import App from "../App";
+import PaperSolving from "../pages/PaperSolving/PaperSolving";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
             {
                 path : "/signup",
                 element : <Signup/>
+            },
+            {
+                path : "/paper/:id",
+                element : <PaperSolving/>
             }
         ]
     },

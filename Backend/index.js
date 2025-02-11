@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const app = express();
 
 const {SignUpFunction,LoginFunction} = require('./Functions/SignupLoginFile')
-const {createPaperFunction} = require('./Functions/CreatePaperFile');
+const {createPaperFunction,PaperFind} = require('./Functions/CreatePaperFile');
 const {verification} = require('./Middlewares/VerificationFile');
 
 mongoose.connect(process.env.MongoUri).then(()=>{
@@ -21,6 +21,7 @@ app.use(cors());
 app.post('/signup',SignUpFunction)
 app.post('/login',LoginFunction)
 app.post('/CreatePaper',verification,createPaperFunction)
+app.get('/Paper/:id',PaperFind);
 
 app.listen(5000,()=>{  
     console.log("Server is running");  

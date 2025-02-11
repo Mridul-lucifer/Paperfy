@@ -8,7 +8,27 @@ const createPaperFunction = async function (req,res) {
         questions : questions
     })
         await Paper.save();
-        res.status(200).json(Paper);
+        res.status(200).json({
+            Link : 'https://localhost:5173/paper'+Paper._id,
+            msg : "Succuessfull Submited"
+        });
 }
 
-module.exports = {createPaperFunction}  
+const PaperFind = async function (req, res) {
+    const id = req.params.id; 
+    try {
+      const Paper = await QuestionPaper.findById(id); 
+      if (!Paper) {
+        return res.status(404).json({ message: 'Paper not found' }); 
+      }
+      res.status(200).json({
+        Paper: Paper, 
+      });
+    } catch (error) {
+      console.error(error); 
+      res.status(500).json({ message: 'An error occurred while fetching the paper' }); 
+    }
+  };
+  
+
+module.exports = {createPaperFunction,PaperFind}  

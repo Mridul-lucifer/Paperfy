@@ -42,10 +42,10 @@ const CreatingExam = () => {
         data:payload,
         Authorization :token
       });
+      const link = (await serverRequest).data.Link
       const minLoaderTime = new Promise((resolve) => setTimeout(resolve, 5000));
       await Promise.all([serverRequest, minLoaderTime]);
-
-      toast.success("Exam successfully created!", {
+      toast.success("Exam successfully created! "+link, {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: true,
